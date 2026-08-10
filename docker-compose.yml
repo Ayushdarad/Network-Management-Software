@@ -1,0 +1,42 @@
+services:
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-nms_root_secret}
+      MYSQL_DATABASE: ${DB_NAME:-nms}
+      MYSQL_USER: ${DB_USER:-nms}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-nms_secret}
+    volumes:
+      - nms_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    restart: unless-stopped
+    cap_add:
+      - NET_RAW
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: ${DB_USER:-nms}
+      DB_PASSWORD: ${DB_PASSWORD:-nms_secret}
+      DB_NAME: ${DB_NAME:-nms}
+      PORT: 3001
+      NODE_ENV: production
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env.docker}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3001}
+      RUN_DB_PUSH: ${RUN_DB_PUSH:-true}
+    ports:
+      - "${APP_PORT:-3001}:3001"
+
+volumes:
+  nms_mysql_data:

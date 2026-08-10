@@ -1,0 +1,65 @@
+# Tecsidel NMS - Technology Stack Documentation
+
+This document serves as a reference for all the major technologies, libraries, and frameworks we are using to build the Tecsidel Network Management System (NMS).
+
+## Frontend (User Interface)
+
+The frontend is built as a single-page application (SPA) focused on high performance, modern aesthetics (glassmorphism, dark mode), and real-time data visualization.
+
+### Core Frameworks
+- **React (v19)**: The core UI library used for building component-based user interfaces.
+- **TypeScript**: Used strictly across the entire frontend for type safety and catching errors before runtime.
+- **Vite (v8)**: The incredibly fast build tool and development server powering the frontend.
+- **React Router DOM (v7)**: Handles client-side routing (e.g., `/dashboard`, `/login`, `/monitoring/alerts`) without reloading the page.
+
+### Styling & UI
+- **Tailwind CSS (v4)**: The utility-first CSS framework used for all styling. It allows us to rapidly build the custom UI without leaving the HTML/JSX.
+- **Framer Motion**: Used for all the smooth animations, such as page transitions, modals sliding in, and micro-interactions (like the hover effects on cards).
+- **Lucide React**: Our comprehensive icon library.
+- **Radix UI Primitives**: Used for accessible, unstyled UI components (like Tabs, Select dropdowns, and Checkboxes) which we then style with Tailwind.
+- **Tailwind Merge / Clsx**: Utilities used heavily in our `cn()` function to conditionally merge Tailwind classes safely without conflicts.
+
+### Data Visualization & Layouts
+- **ECharts (echarts-for-react)**: The powerful charting library used for the real-time Traffic and CPU/Memory graphs on the Dashboard.
+- **Reactflow**: Used specifically for the interactive Network Topology maps, allowing drag-and-drop nodes and edge rendering.
+- **React Grid Layout**: Powers the drag-and-drop widget layout on the Dashboard page.
+
+### Real-time Communication
+- **Socket.io-client**: Connects to the backend WebSocket server to receive live metric updates (like CPU/Memory polling) and instant alert notifications without having to manually refresh the page.
+
+---
+
+## Backend (API & Services)
+
+The backend provides a robust REST API, real-time WebSocket broadcasting, and scheduled background tasks.
+
+### Core Server
+- **Node.js**: The runtime environment.
+- **Express.js (v5)**: The web framework used to create all our REST API routes (e.g., `/api/users`, `/api/metrics`).
+- **TypeScript**: Used alongside Node.js for complete end-to-end type safety.
+- **TSX**: A modern execution engine that allows us to run TypeScript files directly during development without manually compiling them.
+
+### Database & ORM
+- **MySQL**: The core relational database storing all users, devices, metrics, and alerts.
+- **Drizzle ORM**: A modern, lightweight, and type-safe Object Relational Mapper. We use it to define our database schema (`schema.ts`) and run SQL queries programmatically.
+- **MySQL2**: The underlying database driver that connects Drizzle ORM to the MySQL server.
+
+### Authentication & Security
+- **JSON Web Tokens (JWT)**: Used for stateless user authentication. When a user logs in, they receive a JWT token which is passed in the header of subsequent requests.
+- **Bcrypt.js**: Used to securely hash and salt user passwords before saving them to the database.
+- **Cors**: Middleware that allows our frontend (running on a different port) to securely communicate with the backend.
+
+### Real-time & Background Processing
+- **Socket.io**: The WebSocket server running alongside Express. It pushes live data (like the Ping Monitor results and new alerts) to the frontend instantly.
+- **Node-Cron**: Used to run scheduled background tasks on the server (like the simulated Ping Monitor polling devices every 5 seconds).
+
+### Validation
+- **Zod**: A schema declaration and validation library. Used to validate incoming API request bodies (e.g., ensuring a user submits a valid email and strong password).
+
+---
+
+## Architecture Overview
+1. The **Frontend** makes HTTP REST requests to the **Backend** to perform CRUD operations (like adding a user or fetching historical alerts).
+2. The **Backend** executes background tasks (via `node-cron`) to simulate polling network devices.
+3. As device metrics change or alerts are triggered, the **Backend** pushes this data via **Socket.io** directly to the **Frontend**.
+4. The **Frontend** receives the WebSocket events and instantly updates the charts (`ECharts`), topology maps (`Reactflow`), and Notification Bell without needing a page refresh.

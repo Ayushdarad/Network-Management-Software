@@ -1,0 +1,680 @@
+@import "tailwindcss";
+
+/* ─── Tailwind v4 Theme Tokens ───────────────────────────────── */
+@theme {
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Brand / Navy palette */
+  --color-navy-950: #04080f;
+  --color-navy-900: #0B1220;
+  --color-navy-800: #0d1629;
+  --color-navy-700: #111e35;
+  --color-navy-600: #162544;
+  --color-navy-500: #1c2e52;
+
+  --color-brand-50: #e8f4ff;
+  --color-brand-100: #d1e9ff;
+  --color-brand-200: #a3d3ff;
+  --color-brand-300: #60b3ff;
+  --color-brand-400: #2d8bff;
+  --color-brand-500: #0066ff;
+  --color-brand-600: #0047db;
+  --color-brand-700: #0033b3;
+  --color-brand-800: #002a8f;
+  --color-brand-900: #001f6b;
+
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Radius */
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 20px;
+
+  /* Animations */
+  --animate-fade-in: fadeIn 0.3s ease-out;
+  --animate-slide-in: slideIn 0.3s ease-out;
+  --animate-shimmer: shimmer 1.5s infinite;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-spin-slow: spin 3s linear infinite;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-16px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+}
+
+/* ─── CSS Custom Properties ─────────────────────────────────── */
+:root {
+  --bg-base:       #0B1220;
+  --bg-surface:    #111e35;
+  --bg-elevated:   #162544;
+  --bg-hover:      #1c2e52;
+  --border-subtle:  rgba(255,255,255,0.06);
+  --border-default: rgba(255,255,255,0.10);
+  --border-strong:  rgba(255,255,255,0.18);
+  --text-primary:   #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted:     #64748b;
+  --accent-blue:    #0066ff;
+  --accent-cyan:    #06b6d4;
+  --accent-indigo:  #6366f1;
+  --radius-card:    14px;
+  --radius-btn:     8px;
+}
+
+.light {
+  --bg-base:        #f0f4f8;
+  --bg-surface:     #ffffff;
+  --bg-elevated:    #f8fafc;
+  --bg-hover:       #e2e8f0;
+  --border-subtle:  rgba(0,0,0,0.05);
+  --border-default: rgba(0,0,0,0.10);
+  --border-strong:  rgba(0,0,0,0.18);
+  --text-primary:   #0f172a;
+  --text-secondary: #475569;
+  --text-muted:     #94a3b8;
+}
+
+/* ─── Base Reset ─────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* On mobile, allow the page shell to scroll if needed */
+@media (max-width: 767px) {
+  html, body, #root {
+    overflow: auto;
+  }
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* ─── Glass Cards ────────────────────────────────────────────── */
+.glass {
+  background: rgba(17, 30, 53, 0.95);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card);
+}
+
+.light .glass {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border-default);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* ─── Login page always stays dark ──────────────────────────── */
+[data-theme="dark"],
+[data-theme="dark"] * {
+  --bg-base:        #070d1a !important;
+  --text-primary:   #f1f5f9 !important;
+  --text-secondary: #94a3b8 !important;
+  --text-muted:     #64748b !important;
+  --border-default: rgba(255,255,255,0.10) !important;
+}
+
+.light [data-theme="dark"] aside,
+.light [data-theme="dark"] header { background: unset !important; }
+.light [data-theme="dark"] .text-white      { color: #f1f5f9 !important; }
+.light [data-theme="dark"] .text-slate-200  { color: #e2e8f0 !important; }
+.light [data-theme="dark"] .text-slate-300  { color: #cbd5e1 !important; }
+.light [data-theme="dark"] .text-slate-400  { color: #94a3b8 !important; }
+.light [data-theme="dark"] .text-slate-500  { color: #64748b !important; }
+.light [data-theme="dark"] .bg-white\/3     { background: rgba(255,255,255,0.03) !important; }
+.light [data-theme="dark"] .bg-white\/5     { background: rgba(255,255,255,0.05) !important; }
+.light [data-theme="dark"] .border-white\/8 { border-color: rgba(255,255,255,0.08) !important; }
+.light [data-theme="dark"] .border-white\/10{ border-color: rgba(255,255,255,0.10) !important; }
+.light [data-theme="dark"] .glass           { background: rgba(17,30,53,0.95) !important; }
+.light {
+  color-scheme: light;
+}
+
+.light body,
+.light #root {
+  background: #f0f4f8;
+  color: #0f172a;
+}
+
+/* AppShell background */
+.light .bg-\[#0B1220\] { background: #f0f4f8 !important; }
+
+/* Sidebar */
+.light aside {
+  background: rgba(255,255,255,0.96) !important;
+  border-right-color: rgba(0,0,0,0.08) !important;
+}
+
+/* TopBar */
+.light header {
+  background: rgba(255,255,255,0.96) !important;
+  border-bottom-color: rgba(0,0,0,0.08) !important;
+}
+
+/* Main content area */
+.light main {
+  background: #f0f4f8;
+}
+
+/* Text overrides */
+.light .text-white  { color: #0f172a !important; }
+.light .text-slate-200 { color: #1e293b !important; }
+.light .text-slate-300 { color: #334155 !important; }
+.light .text-slate-400 { color: #475569 !important; }
+.light .text-slate-500 { color: #64748b !important; }
+.light .text-slate-600 { color: #94a3b8 !important; }
+
+/* Border overrides */
+.light .border-white\/6  { border-color: rgba(0,0,0,0.06) !important; }
+.light .border-white\/8  { border-color: rgba(0,0,0,0.08) !important; }
+.light .border-white\/10 { border-color: rgba(0,0,0,0.10) !important; }
+
+/* Background overrides */
+.light .bg-white\/3  { background: rgba(0,0,0,0.03) !important; }
+.light .bg-white\/4  { background: rgba(0,0,0,0.04) !important; }
+.light .bg-white\/5  { background: rgba(0,0,0,0.05) !important; }
+.light .bg-white\/6  { background: rgba(0,0,0,0.06) !important; }
+.light .bg-white\/8  { background: rgba(0,0,0,0.08) !important; }
+
+/* Sidebar links in light */
+.light .sidebar-link       { color: #475569; }
+.light .sidebar-link:hover { background: rgba(0,0,0,0.05); color: #0f172a; }
+.light .sidebar-link.active{ background: rgba(0,102,255,0.12); color: #0047db; border-color: rgba(0,102,255,0.25); }
+
+/* Table in light */
+.light .nms-table th { color: #64748b; border-bottom-color: rgba(0,0,0,0.06); background: rgba(0,0,0,0.02); }
+.light .nms-table td { color: #475569; border-bottom-color: rgba(0,0,0,0.04); }
+.light .nms-table tr:hover td { background: rgba(0,0,0,0.03); color: #0f172a; }
+
+/* Scrollbar in light */
+.light ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); }
+.light ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.25); }
+
+/* Input/select in light */
+.light input, .light select, .light textarea {
+  color: #0f172a;
+}
+.light select option {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+/* Hardcoded dark backgrounds used inline in components */
+.light [style*="rgba(7,13,26"],
+.light [style*="rgba(7, 13, 26"] {
+  background: rgba(255,255,255,0.95) !important;
+}
+.light [style*="rgba(17,30,53"],
+.light [style*="rgba(17, 30, 53"] {
+  background: rgba(248,250,252,0.95) !important;
+}
+.light [style*="#0b1220"],
+.light [style*="#0B1220"],
+.light [style*="#071018"],
+.light [style*="#070d1a"] {
+  background: #f0f4f8 !important;
+}
+
+/* ─── Glow Effects ───────────────────────────────────────────── */
+.glow-blue {
+  box-shadow: 0 0 24px rgba(0, 102, 255, 0.25);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 24px rgba(6, 182, 212, 0.30);
+}
+
+.glow-green {
+  box-shadow: 0 0 24px rgba(16, 185, 129, 0.25);
+}
+
+.glow-red {
+  box-shadow: 0 0 24px rgba(239, 68, 68, 0.25);
+}
+
+/* ─── Status Dots ────────────────────────────────────────────── */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.status-dot.online {
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+}
+
+.status-dot.offline {
+  background: #ef4444;
+  box-shadow: 0 0 6px #ef4444;
+}
+
+.status-dot.warning {
+  background: #f59e0b;
+  box-shadow: 0 0 6px #f59e0b;
+}
+
+.status-dot.unknown {
+  background: #64748b;
+}
+
+/* ─── Severity Badges ────────────────────────────────────────── */
+.badge {
+  padding: 2px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-critical {
+  background: rgba(239, 68, 68, 0.18);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-info {
+  background: rgba(59, 130, 246, 0.18);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.badge-success {
+  background: rgba(16, 185, 129, 0.18);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-unknown {
+  background: rgba(100, 116, 139, 0.18);
+  color: #94a3b8;
+  border: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+/* ─── Gradient Text ──────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #60b3ff, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Skeleton Loading ───────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.06) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.06) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+/* ─── Sidebar Links ──────────────────────────────────────────── */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: background 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text-primary);
+}
+
+.sidebar-link.active {
+  background: rgba(0, 102, 255, 0.18);
+  color: #60b3ff;
+  border: 1px solid rgba(0, 102, 255, 0.25);
+}
+
+/* ─── Topology Canvas ────────────────────────────────────────── */
+.react-flow__background {
+  background: var(--bg-base) !important;
+}
+
+.react-flow__edge-path {
+  stroke: rgba(0, 102, 255, 0.5) !important;
+  stroke-width: 2;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #06b6d4 !important;
+}
+
+.react-flow__controls {
+  background: rgba(17, 30, 53, 0.9) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: 10px !important;
+}
+
+.react-flow__controls-button {
+  background: transparent !important;
+  border: none !important;
+  color: #94a3b8 !important;
+}
+
+.react-flow__controls-button:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #f1f5f9 !important;
+}
+
+.react-flow__minimap {
+  background: rgba(17, 30, 53, 0.9) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: 10px !important;
+}
+
+/* ─── NMS Data Table ─────────────────────────────────────────── */
+.nms-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.nms-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.nms-table td {
+  padding: 11px 14px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background 0.15s;
+}
+
+.nms-table tr:hover td {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+}
+
+.nms-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* ─── Animations ─────────────────────────────────────────────── */
+@keyframes livePulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.live-indicator {
+  animation: livePulse 2s ease-in-out infinite;
+  will-change: opacity;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* ─── Focus ──────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── Gradient Border ────────────────────────────────────────── */
+.gradient-border {
+  position: relative;
+  border-radius: var(--radius-card);
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0, 102, 255, 0.4), rgba(6, 182, 212, 0.4));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ─── React Grid Layout ──────────────────────────────────────── */
+.react-grid-item.react-grid-placeholder {
+  background: rgba(0, 102, 255, 0.15) !important;
+  border: 2px dashed rgba(0, 102, 255, 0.4) !important;
+  border-radius: var(--radius-card) !important;
+  opacity: 1 !important;
+}
+
+.react-grid-item>.react-resizable-handle::after {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* ─── Select / input overrides for dark theme ────────────────── */
+select option {
+  background: #111e35;
+  color: #f1f5f9;
+}
+
+/* ─── Mobile Responsive Utilities ───────────────────────────── */
+
+/* Mobile card view for tables */
+.mobile-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mobile-card {
+  background: rgba(17, 30, 53, 0.95);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 0.875rem 1rem;
+}
+
+.mobile-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.2rem 0;
+}
+
+.mobile-card-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  min-width: 90px;
+}
+
+.mobile-card-value {
+  font-size: 12px;
+  color: var(--text-primary);
+  text-align: right;
+  flex: 1;
+}
+
+/* Scrollable table wrapper for mobile */
+.table-scroll-mobile {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Touch-friendly input sizing */
+@media (max-width: 767px) {
+  input, select, textarea, button {
+    font-size: 16px !important; /* prevents iOS zoom */
+  }
+
+  .nms-table th,
+  .nms-table td {
+    padding: 0.5rem 0.75rem;
+    font-size: 11px;
+  }
+}
