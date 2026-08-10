@@ -1,4 +1,4 @@
-# Tecsidel NMS
+# NMS
 
 Network Management System for monitoring device availability via ICMP ping, managing alerts, inventory, logs, scheduled jobs, and reports.
 
